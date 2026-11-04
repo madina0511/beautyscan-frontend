@@ -18,7 +18,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const signup = mode === "signup";
   const [show, setShow] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<"authError" | "connectionError" | "passwordError" | null>(null);
+  const [error, setError] = useState<AuthError["kind"] | "passwordError" | null>(null);
   const [success, setSuccess] = useState(false);
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault(); if (busy) return;
@@ -34,7 +34,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
         await login({ member: String(form.get("identifier")).trim(), password });
       }
       setSuccess(true);
-    } catch (error) { setError(error instanceof AuthError && error.kind === "connectionError" ? "connectionError" : "authError"); } finally { setBusy(false); }
+    } catch (error) { setError(error instanceof AuthError ? error.kind : "authError"); } finally { setBusy(false); }
   }
   return <main id="main" className="auth-layout"><aside className="auth-story"><span className="eyebrow">{t.authEyebrow}</span><h1>{t.authTitle}</h1><p>{t.authText}</p><span className="auth-flower" aria-hidden="true">✳</span><span className="auth-story-note">BeautyScan AI</span></aside><section className="auth-panel"><Link href="/" className="text-link back-link">← {t.back}</Link><span className="eyebrow">BeautyScan AI</span><h2>{signup ? t.join : t.welcome}</h2><p>{signup ? t.signupText : t.loginText}</p>
     {auth.status === "restoring" || auth.status === "loggingOut" ? <p className="auth-loading" role="status"><span className="spinner" />{t.restoring}</p> : auth.status === "authenticated" || (signup && success) ? <div className="success-message" role="status"><span aria-hidden="true">✓</span><h3>{auth.status === "authenticated" ? t.loginSuccess : t.signupSuccess}</h3><Link className="button" href={auth.status === "authenticated" ? "/#workspace" : continuing ? "/login?studio=1" : "/login"}>{auth.status === "authenticated" ? t.back : t.login}<span aria-hidden="true">↗</span></Link></div> : <form onSubmit={submit} aria-busy={busy}><fieldset disabled={busy}>

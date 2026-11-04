@@ -10,7 +10,7 @@ type State = {
 };
 function errorKey(error: unknown): ErrorKey {
   if (error instanceof ProductError) return error.kind;
-  if (error instanceof AuthError) return error.kind === "authError" ? "productError" : error.kind;
+  if (error instanceof AuthError) return error.kind === "connectionError" || error.kind === "sessionExpired" ? error.kind : "productError";
   return "productError";
 }
 

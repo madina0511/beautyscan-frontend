@@ -99,7 +99,7 @@ test("network-failed create is never replayed and duplicate in-flight submits ar
   finish({ ok: false, status: 503 });
   assert.equal(await first, false);
   assert.equal(h.calls.filter(call => call.query.includes("CreateProduct")).length, 1);
-  assert.equal(h.workspace.getSnapshot().createError, "connectionError");
+  assert.equal(h.workspace.getSnapshot().createError, "productError");
 });
 
 test("authorization rejection renews once and retries with the renewed Bearer token", async () => {

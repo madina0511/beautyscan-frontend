@@ -89,7 +89,7 @@ export function initializeSession() {
 
 export async function login(input: { member: string; password: string }) {
   return serialized(async () => {
-    const data = await authRequest(authOperations.login, { input });
+    const data = await authRequest(authOperations.login, { input }, undefined, "login");
     if (!isRecord(data) || !isRecord(data.login) || typeof data.login.accessToken !== "string" ||
       !isRecord(data.login.member) || typeof data.login.member.id !== "string" || typeof data.login.member.name !== "string") throw new AuthError("authError");
     const session = sessionFromToken(data.login.accessToken, data.login.member.name);
@@ -107,7 +107,7 @@ export async function login(input: { member: string; password: string }) {
 }
 
 export async function signup(input: { name: string; email: string; password: string }) {
-  const data = await authRequest(authOperations.signup, { input });
+  const data = await authRequest(authOperations.signup, { input }, undefined, "signup");
   if (!isRecord(data) || !isRecord(data.signup) || typeof data.signup.id !== "string") throw new AuthError("authError");
 }
 
