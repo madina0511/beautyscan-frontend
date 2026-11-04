@@ -1,0 +1,19 @@
+# Allow only build inputs. Public environment is supplied explicitly as build args.
+**
+!Dockerfile
+!package.json
+!package-lock.json
+!next.config.ts
+!next-env.d.ts
+!tsconfig.json
+!postcss.config.*
+!src/
+!src/**
+!public/
+!public/**
+src/**/.env*
+public/**/.env*
+**/*.pem
+**/*.key
+**/*service-account*.json
+**/*credentials*.json
